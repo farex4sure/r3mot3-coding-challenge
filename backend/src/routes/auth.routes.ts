@@ -1,11 +1,10 @@
-import { Router, RequestHandler } from 'express';
-import { signUp, signIn } from '../controllers/auth.controller';
+import express from 'express';
+import { AuthController } from '../controllers/auth.controller';
 
-export const authRoutes = Router();
+const authRoutes = express.Router();
+const authController = new AuthController();
 
-// Route for user signup
-authRoutes.post('/signup', signUp as RequestHandler);
+authRoutes.post('/signup', authController.signUp);
+authRoutes.post('/signin', authController.signIn);
 
-// Route for user signin
-authRoutes.post('/signin', signIn as RequestHandler);
- 
+export default authRoutes;

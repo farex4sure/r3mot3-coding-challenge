@@ -2,9 +2,11 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { json, urlencoded } from 'express';
 import cors from 'cors';
-import { authRoutes } from './routes/auth.routes';
-import { roomRoutes } from './routes/room.routes';
-import { chatRoutes } from './routes/chat.routes';
+import { errorHandler } from './middlewares/errorHandler';
+
+import authRoutes from './routes/auth.routes';
+import roomRoutes from './routes/room.routes';
+import chatRoutes from './routes/chat.routes';
 
 dotenv.config();
 
@@ -23,5 +25,8 @@ app.use(urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/chats', chatRoutes);
+
+// Error handling middleware (placed at the end)
+app.use(errorHandler);
 
 export default app;

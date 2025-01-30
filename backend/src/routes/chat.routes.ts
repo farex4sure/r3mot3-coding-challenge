@@ -1,11 +1,14 @@
-import { Router, RequestHandler } from 'express';
-import { sendMessage, fetchChatHistory } from '../controllers/chat.controller';
-import { authenticate } from '../middleware/auth.middleware';
+import express from 'express';
+import { MessageController } from '../controllers/chat.controller';
+import { errorHandler } from '../middlewares/errorHandler';
 
-export const chatRoutes = Router();
+const router = express.Router();
 
-// Route to send messages to a specific room, requires authentication
-chatRoutes.post('/send-messages/:roomId', authenticate, sendMessage as unknown as RequestHandler);
+router.post('/send-messages/:roomId', MessageController.sendMessage);
+router.get('/messages/:roomId', MessageController.fetchChatHistory);
 
-// Route to fetch chat history for a specific room
-chatRoutes.get('/messages/:roomId', fetchChatHistory as RequestHandler);
+// Apply the error handler middleware
+router.use(errorHandler);
+
+export default router;
+
