@@ -6,18 +6,12 @@ import { authRoutes } from './routes/auth.routes';
 import { roomRoutes } from './routes/room.routes';
 import { chatRoutes } from './routes/chat.routes';
 
-dotenv.config(); 
+dotenv.config();
 
 
 const app = express();
-const port = process.env.PORT || 8080;
 app.get('/', (req, res) => {
     res.send('Server is running!');
-});
-
-
-app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
 });
 
 // Middleware

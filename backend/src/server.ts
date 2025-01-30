@@ -5,7 +5,7 @@ import cors from 'cors';
 import app from './app';
 import { handleChatSocket } from './sockets/chat.socket';
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Create HTTP Server
 const server = http.createServer(app);

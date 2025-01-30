@@ -10,18 +10,22 @@ interface AuthRequest extends Request {
 }
 
 export const sendMessage = async (req: AuthRequest, res: Response) => {
+  // Extract roomId and content from request parameters and body
   const { roomId } = req.params;
   const { content } = req.body;
   const userId = req.user?.id; // Ensure user is defined before accessing `id`
 
+  // Check if user is authenticated
   if (!userId) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {
+    // Find the room by its ID
     const room = await Room.findByPk(roomId);
     if (!room) return res.status(404).json({ error: 'Room not found' });
 
+    // Create a new message in the database
     const message = await Message.create({ content, userId, roomId });
     res.status(201).json({ status: 'Message sent', message });
   } catch (error) {
@@ -30,9 +34,8 @@ export const sendMessage = async (req: AuthRequest, res: Response) => {
   }
 };
 
-
-
 export const fetchChatHistory = async (req: Request, res: Response) => {
+  // Extract roomId from request parameters
   const { roomId } = req.params;
 
   try {
@@ -81,6 +84,7 @@ export const fetchChatHistory = async (req: Request, res: Response) => {
       email: userMap[msg.userId]?.email || 'Unknown',
     }));
 
+    // Send enriched messages as response
     res.status(200).json(enrichedMessages);
   } catch (error) {
     console.error('Error fetching chat history:', error);
