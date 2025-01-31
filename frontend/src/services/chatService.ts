@@ -7,7 +7,7 @@ export const fetchMessages = async (roomId: string) => {
   try {
     const response = await API.get(`/chats/messages/${roomId}`);
     // const token = localStorage.getItem('token');
-    return response.data; // Assuming API returns an array of messages
+    return response.data.data; // Assuming API returns an array of messages
   } catch (error) {
     console.error('Error fetching messages:', error);
     return [];

@@ -36,24 +36,24 @@ const Rooms: React.FC = () => {
     setCreatingRoom(true);
     try {
       const newRoom = await createRoom(roomName);
-      // console.log("Room created successfully:", newRoom);
-
-      if (!newRoom || !newRoom.room.id || !newRoom.room.name) {
+  
+      if (!newRoom || !newRoom.id || !newRoom.name) {
         console.error("Invalid room data:", newRoom);
         alert("Room created, but response was invalid.");
       } else {
-        setRooms([...rooms, { id: newRoom.room.id, name: newRoom.room.name }]);
+        setRooms([...rooms, { id: newRoom.id, name: newRoom.name }]);
       }
-
+  
       setShowModal(false);
       setRoomName("");
-    } catch (error) {
-      console.error("Error creating room:", error);
+    } catch (error: any) {
+      console.error("Error creating room:", error.response ? error.response.data : error.message);
       alert("Failed to create room. Try again!");
     } finally {
       setCreatingRoom(false);
     }
   };
+  
 
   return (
     <div className="rooms-page">
