@@ -1,14 +1,11 @@
 import express from 'express';
-import { MessageController } from '../controllers/chat.controller';
-import { errorHandler } from '../middlewares/errorHandler';
+import { ChatController } from '../controllers/chat.controller';
 
-const router = express.Router();
+const chatRoutes = express.Router();
+const MessageController = new ChatController();
 
-router.post('/send-messages/:roomId', MessageController.sendMessage);
-router.get('/messages/:roomId', MessageController.fetchChatHistory);
+chatRoutes.post('/send-messages/:roomId', MessageController.sendMessage);
+chatRoutes.get('/messages/:roomId', MessageController.fetchChatHistory);
 
-// Apply the error handler middleware
-router.use(errorHandler);
-
-export default router;
+export default chatRoutes;
 

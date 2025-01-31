@@ -26,7 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/chats', chatRoutes);
 
-// Error handling middleware (placed at the end)
+// Error handling middleware
 app.use(errorHandler);
 
 export default app;

@@ -3,7 +3,7 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { AuthService } from '../services/auth.service';
 import { CustomResponse } from '../types/customResponse';
 
-export class AuthController {
+export class AuthController { 
   private authService: AuthService;
 
   constructor() {

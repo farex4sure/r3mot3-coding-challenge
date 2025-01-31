@@ -1,9 +1,10 @@
 import express from 'express';
-import { createRoom, getAllRooms } from '../controllers/room.controller';
+import { RoomController } from '../controllers/room.controller';
 
-const router = express.Router();
+const roomRoutes = express.Router();
+const roomController = new RoomController();
 
-router.post('/create-room', createRoom);
-router.get('/', getAllRooms);
+roomRoutes.post('/create-room', roomController.createRoom);
+roomRoutes.get('/', roomController.getAllRooms);
 
-export default router;
+export default roomRoutes;

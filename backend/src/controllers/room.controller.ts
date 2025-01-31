@@ -1,21 +1,60 @@
 import { Request, Response, NextFunction } from 'express';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { createRoomService, getAllRoomsService } from '../services/room.service';
+import { CustomResponse } from '../types/customResponse';
 
-export const createRoom = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { name } = req.body;
-    const room = await createRoomService(name);
-    res.status(201).json({ message: 'Room created', room });
-  } catch (error) {
-    next(error);
-  }
-};
+export class RoomController {
+  public createRoom = async (
+    req: Request,
+    res: CustomResponse<any>,
+    next: NextFunction
+  ) => {
+    try {
+      const { name } = req.body;
+      const room = await createRoomService(name);
+      this.send(
+        res,
+        room,
+        StatusCodes.CREATED,
+        ReasonPhrases.CREATED,
+        'Room created successfully'
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
 
-export const getAllRooms = async (_req: Request, res: Response, next: NextFunction) => {
-  try {
-    const rooms = await getAllRoomsService();
-    res.status(200).json(rooms);
-  } catch (error) {
-    next(error);
-  }
-};
+  public getAllRooms = async (
+    _req: Request,
+    res: CustomResponse<any>,
+    next: NextFunction
+  ) => {
+    try {
+      const rooms = await getAllRoomsService();
+      this.send(
+        res,
+        rooms,
+        StatusCodes.OK,
+        ReasonPhrases.OK,
+        'Rooms fetched successfully'
+      );
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  private send = (
+    res: CustomResponse<any>,
+    data: any,
+    statusCode: number,
+    statusText: string,
+    message: string
+  ) => {
+    res.status(statusCode).json({
+      success: true,
+      status: statusText,
+      message,
+      data,
+    });
+  };
+}
