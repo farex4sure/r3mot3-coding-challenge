@@ -1,24 +1,28 @@
-import type React from "react"
-import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
-import { signUp } from "../../services/auth"
-import "./SignUp.css"
+import type React from "react";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { signUp } from "../../services/auth";
+import "./SignUp.css";
 
 const SignUp: React.FC = () => {
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const navigate = useNavigate()
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
+    setLoading(true);
     try {
-      await signUp({ username, email, password })
-      navigate("/signin")
+      await signUp({ username, email, password });
+      navigate("/signin");
     } catch (error) {
-      console.error("Signup failed:", error)
+      console.error("Signup failed:", error);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="sign-up-page">
@@ -26,7 +30,6 @@ const SignUp: React.FC = () => {
         <h1>Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            {/* <label htmlFor="username">Username</label> */}
             <input
               type="text"
               id="username"
@@ -37,7 +40,6 @@ const SignUp: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            {/* <label htmlFor="email">Email</label> */}
             <input
               type="email"
               id="email"
@@ -48,7 +50,6 @@ const SignUp: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            {/* <label htmlFor="password">Password</label> */}
             <input
               type="password"
               id="password"
@@ -58,10 +59,11 @@ const SignUp: React.FC = () => {
               required
             />
           </div>
-          <button type="submit" className="button primary">
-            Sign Up
+          <button type="submit" className="button primary" disabled={loading}>
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
+        {loading && <div className="loader"></div>}
         <p>
           Already have an account?{" "}
           <Link to="/signin" className="link">
@@ -70,8 +72,7 @@ const SignUp: React.FC = () => {
         </p>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
-
+export default SignUp;

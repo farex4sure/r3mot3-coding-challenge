@@ -10,12 +10,13 @@ const Chat: React.FC = () => {
   const socket = useSocket();
   const [messages, setMessages] = useState<{ username: string; content: string }[]>([]);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false); // Loader state
   const sender = localStorage.getItem('username') || 'User';
 
   // Fetch previous messages from API
   useEffect(() => {
     const getMessages = async () => {
-      if (!roomId) return; // Ensure roomId exists
+      if (!roomId) return;
       const data = await fetchMessages(roomId);
       setMessages(data);
     };
@@ -29,7 +30,6 @@ const Chat: React.FC = () => {
       socket.emit('joinRoom', roomId);
 
       socket.on('message', async (newMessage) => {
-        // Fetch messages again after receiving a new message
         if (roomId) {
           const data = await fetchMessages(roomId);
           setMessages(data);
@@ -43,17 +43,22 @@ const Chat: React.FC = () => {
   }, [socket, roomId]);
 
   const sendMessage = async () => {
-    if (!roomId || !message.trim()) return; // Ensure roomId exists
-    const newMessage = { roomId, message };
-  
-    socket?.emit('sendMessage', newMessage);
-    await sendMessageToApi(roomId, message);
-    
-    // Fetch messages again after sending
-    const data = await fetchMessages(roomId);
-    setMessages(data);
-    
-    setMessage('');
+    if (!roomId || !message.trim()) return;
+    setLoading(true); // Start loader
+
+    try {
+      const newMessage = { roomId, message };
+      socket?.emit('sendMessage', newMessage);
+      await sendMessageToApi(roomId, message);
+
+      const data = await fetchMessages(roomId);
+      setMessages(data);
+      setMessage('');
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setLoading(false); // Stop loader
+    }
   };
 
   return (
@@ -71,8 +76,11 @@ const Chat: React.FC = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Type a message..."
+              disabled={loading} // Disable input while loading
             />
-            <button onClick={sendMessage}>Send</button>
+            <button onClick={sendMessage} disabled={loading}>
+              {loading ? "Sending..." : "Send"}
+            </button>
           </div>
         </div>
 

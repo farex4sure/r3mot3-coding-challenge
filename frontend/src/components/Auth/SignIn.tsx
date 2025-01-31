@@ -1,27 +1,30 @@
-import type React from "react"
-import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
-import { signIn } from "../../services/auth"
-import "./SignIn.css"
+import type React from "react";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { signIn } from "../../services/auth";
+import "./SignIn.css";
 
 const SignIn: React.FC = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
+    setLoading(true);
     try {
-      const data = await signIn({ email, password })
-      localStorage.setItem("token", data.token)
-      localStorage.setItem("username", data.username)
-      navigate("/rooms")
+      const data = await signIn({ email, password });
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.username);
+      navigate("/rooms");
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Login failed. Please try again."
-      alert(errorMessage)
+      const errorMessage = error.response?.data?.message || "Login failed. Please try again.";
+      alert(errorMessage);
+    } finally {
+      setLoading(false);
     }
-  }
-  
+  };
 
   return (
     <div className="sign-in-page">
@@ -29,7 +32,6 @@ const SignIn: React.FC = () => {
         <h1>Sign In</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            {/* <label htmlFor="email">Email</label> */}
             <input
               type="email"
               id="email"
@@ -40,7 +42,6 @@ const SignIn: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            {/* <label htmlFor="password">Password</label> */}
             <input
               type="password"
               id="password"
@@ -50,10 +51,11 @@ const SignIn: React.FC = () => {
               required
             />
           </div>
-          <button type="submit" className="button primary">
-            Sign In
+          <button type="submit" className="button primary" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
+        {loading && <div className="loader"></div>}
         <p>
           Don't have an account?{" "}
           <Link to="/signup" className="link">
@@ -62,8 +64,7 @@ const SignIn: React.FC = () => {
         </p>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default SignIn
-
+export default SignIn;
