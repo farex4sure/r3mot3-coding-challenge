@@ -19,15 +19,15 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-  console.log('🔌 New client connected:', socket.id);
+  // console.log('🔌 New client connected:', socket.id);
   handleChatSocket(socket, io);
 
   socket.on('disconnect', () => {
-    console.log('❌ Client disconnected:', socket.id);
+    // console.log('❌ Client disconnected:', socket.id);
   });
 });
 
 // Start Server
 server.listen(PORT, async () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  // console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

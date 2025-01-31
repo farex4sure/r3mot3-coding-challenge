@@ -14,11 +14,11 @@ if (process.env.NODE_ENV === "production") {
   }
   // Set connection string for production database with SSL mode
   connectionString = process.env.POSTGRES_URL + "?sslmode=require";
-  console.log(`Connected to production database: ${process.env.POSTGRES_URL}`);
+  // console.log(`Connected to production database: ${process.env.POSTGRES_URL}`);
 } else {
   // Set connection string for local development database
   connectionString = "postgres://postgres:farex@localhost/realtimechat";
-  console.log("Connected to local database");
+  // console.log("Connected to local database");
 }
 
 // Initialize Sequelize with the correct connection string
