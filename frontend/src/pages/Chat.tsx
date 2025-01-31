@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSocket } from '../hooks/useSocket';
 import { fetchMessages, sendMessageToApi } from '../services/chatService';
 import './Chat.css';
 
 const Chat: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
+  const navigate = useNavigate();
   const socket = useSocket();
   const [messages, setMessages] = useState<{ username: string; content: string }[]>([]);
   const [message, setMessage] = useState('');
@@ -58,6 +59,7 @@ const Chat: React.FC = () => {
   return (
     <div>
       <header className="chat-header">
+        <button className="back-button" onClick={() => navigate(-1)}>←</button>
         <h1 style={{ color: "white", textAlign: "center" }}>Chat Room</h1>
       </header>
       <div className="chat-container">
@@ -92,6 +94,6 @@ const Chat: React.FC = () => {
       </div>
     </div>
   );
-};
+}; 
 
 export default Chat;
