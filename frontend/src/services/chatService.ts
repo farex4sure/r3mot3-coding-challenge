@@ -1,10 +1,11 @@
-import axios from 'axios';
+// import axios from 'axios';
+import API from './api';
 
-const API_BASE_URL = 'http://localhost:8080';
+// const API_BASE_URL = process.env.REACT_APP_API_URL
 
 export const fetchMessages = async (roomId: string) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/api/chats/messages/${roomId}`);
+    const response = await API.get(`/chats/messages/${roomId}`);
     // const token = localStorage.getItem('token');
     return response.data; // Assuming API returns an array of messages
   } catch (error) {
@@ -16,7 +17,7 @@ export const fetchMessages = async (roomId: string) => {
 export const sendMessageToApi = async (roomId: string, content: string) => {
   try {
     const token = localStorage.getItem('token');
-    await axios.post(`${API_BASE_URL}/api/chats/send-messages/${roomId}`, 
+    await API.post(`/chats/send-messages/${roomId}`, 
       { roomId, content },
       { headers: { Authorization: `Bearer ${token}` } }
     );
