@@ -36,7 +36,7 @@ const Rooms: React.FC = () => {
     setCreatingRoom(true);
     try {
       const newRoom = await createRoom(roomName);
-      console.log("Room created successfully:", newRoom);
+      // console.log("Room created successfully:", newRoom);
 
       if (!newRoom || !newRoom.room.id || !newRoom.room.name) {
         console.error("Invalid room data:", newRoom);
